@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block title %}Creating New Tag{% endblock %} {% block content %}
+<!--nagłówek-->
+<h1 class="header">Here you can manage your tags and statuses.</h1>
+
+<!--wyświetlanie istniejących tagów
+<div class="form-group">
+    <div class="tags-container">
+        <p>Your current available tags:</p>
+        <ul class="tags-list">
+        {% if not tags %}
+            You have no tags yeat. Add first tag.
+        {% else %}
+            {% for tag in tags %}          
+                <li style="color: {{ tag.color }};">{{tag.name}}</li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+    </div>
+</div>
+-->
+
+<hr>
+
+<!--Formularz dodawania nowych tagów-->
+<div class="tags-adding-form">
+    <form method="POST" action="/new-tag">
+        <div class="form-group">
+            <div class="tag-adding">
+                <div class="add-tag">
+                    <label for="new_tag">Add new tag:</label>
+                    <input type="text" id="new_tag" name="new_tag" class="form-control" placeholder="Enter New Tag Here"/>
+                </div>
+                <div class="tag-color">
+                    <label for="tag_color">Choose font colour for your tag:</label>
+                    <input type="color" id="tag_color" name="tag_color">
+                </div>
+                <br/>
+                <div class="tag-button">
+                    <button type="submit" class="btn btn-primary">Press to add tag</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<!--Formularz dodawania nowych statusów-->
+<div class="statuses-adding-form">
+    <form method="POST" action="/new-status">
+        <div class="form-group">
+            <div class="status-adding">
+                <div class="add-status">
+                    <label for="new_status">Add new status:</label>
+                    <input type="text" id="new_status" name="new_status" class="form-control" placeholder="Enter New Status Here"/>
+                </div>
+                <div class="status-color">
+                    <label for="status_color">Choose background colour for your status:</label>
+                    <input type="color" id="status_color" name="status_color">
+                </div>
+                <br>
+                <div class="status-button">
+                    <button type="submit" class="btn btn-primary">Press to add status</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+<!--Kontener z formularzami do usuwania tagów i statusów-->
+<div class="statuses-tags-removing">
+    <!--Formularz usuwania tagów-->
+    <div class="tags-removing">
+        
+        <form method="POST" action="/remove-tag">
+            <div class="form-group">
+                <label for="removed_tags">Choose tags you want to remove:</label>
+                <select class="removed_tags" id="removed_tags" name="removed_tags" multiple>
+                    {% if tags|length > 0 %}
+                        {% for tag in tags %}
+                            <option value="{{ tag.name }}" style="color: {{ tag.color }};">{{ tag.name }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option disabled>No tags in database. Please add tags.</option>
+                    {% endif %}
+                </select>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary">Remove tag</button>
+            </div>
+        </form>
+    </div>
+    <!--Formularz usuwania statusów-->
+    <div class="statuses-removing">
+        <form method="POST" action="/remove-status">
+
+            <div class="form-group">
+                <label for="removed_statuses">Choose statuses you want to remove</label>
+                <select class="removed_statuses" id="removed_statuses" name="removed_statuses" multiple>
+                {% if statuses|length > 0 %}
+                    {% for status in statuses %}
+                        <option value="{{ status.name }}" style="color: {{ status.color }};">{{status.name}}</option>
+                    {% endfor %}
+                {% else %}
+                    <option disabled>No statuses in database. Please add statuses.</option>
+                {% endif %}
+                </select>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary">Remove status</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

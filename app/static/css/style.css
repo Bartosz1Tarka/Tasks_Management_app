@@ -1,0 +1,208 @@
+/*KOLOR TŁA STRONY*/
+body {
+    background-color: darkgray;
+}
+/*wyświetlanie treści tagów w HOMIE*/
+.tag {
+    display: inline-block;
+    background-color: #f1f1f1;
+    color: #333;
+    padding: 2px 8px;
+    margin: 2px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/*wyświetlanie listy tagów w ADD NEW TAG*/
+.tags-list {
+    display: flex; /* ustawianie elementów w jednym wierzu */
+    justify-content: flex; /* dynamiczne odstępy między elementami listy */
+    flex-wrap: wrap; /* zawiajnie elementów */
+    color: #333; /* kolor czcionki */
+    gap: 10px; /* odstępy między elementami */
+    padding: 0; /* wcięcia */
+    margin: 0; /* marginesy */
+}
+
+.tags-list li {
+    list-style-position: inside; /* Kropki wewnątrz elementu */
+    margin: 0; /* Brak dodatkowego marginesu */
+}
+
+
+.tags {
+height: auto; /* Automatyczna wysokość */
+width: fit-content;
+}
+
+label {
+    display: block;
+}
+
+
+.list-group > li:nth-child(odd) {
+    background-color: lightgrey;
+}
+
+.add-tag, .add-status {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    gap: 20px;
+}
+
+.add-tag label, .add-status label {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.tag-adding, .status-adding {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+.tag-button, .status-button {
+    display: flex;
+    justify-content: left;
+    align-self: center;
+}
+
+.form-group {
+    margin: 0;
+    padding: 0;
+}
+
+.tag-color, .status-color {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap:20px;
+}
+
+.tags-status-container {
+    display: flex;
+    align-items: center; /* Wyrównanie do góry */
+    gap: 20px; /* Większy odstęp między elementami */
+}
+
+.tags-container, .status-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tags-container select, .status-container select {
+    height: 120px; /* Dopasowanie wysokości obu pól */
+    width: 100%; /* Ustawienie pełnej szerokości */
+}
+
+
+
+.list-group-item .title-display {
+    font-size: 24px !important;
+}
+
+.list-group-item {
+    margin-bottom: 10px;
+}
+
+.statuses-tags-removing {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tags-removing, .statuses-removing {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.tags-adding-form, .statuses-adding-form {
+    display: flex;
+    justify-content: center; /* Wyśrodkowanie */
+    align-items: center;
+    width: 100%; /* Pełna szerokość */
+}
+
+.header {
+    text-align: center;
+}
+
+.edit-tags {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-status {
+    display: flex;
+    justify-content: center;
+}
+
+.edit-status label {
+    margin-right: 10px;
+}
+
+.save-button-container {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%; /* Zapewnia, że div zajmuje całą szerokość */
+    margin-top: 10px; /* Opcjonalnie, dla odstępu od góry */
+}
+
+.modal-title {
+    display: flex;
+    justify-items: center;
+}
+
+.task-tags-display {
+    display: flex;
+    align-items: center; /* Wyrównuje "Tags:" i tagi w pionie */
+    gap: 8px; /* Odstęp między "Tags:" a pierwszym tagiem */
+}
+
+.tags-container-display {
+    display: flex !important; /* Wymusza flexbox */
+    max-width: 100%; /* Ustawia tagi w jednym wierszu */
+    flex-wrap: wrap !important; /* Zapobiega przechodzeniu do nowej linii */
+    gap: 5px; /* Odstępy między tagami */
+}
+
+.tag {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap; /* Zapobiega łamaniu tekstu w tagach */
+}
+
+.status-container-display {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Odstęp między "Status:" a jego wartością */
+}
+
+.task-lower {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .task-lower-left, .task-lower-right {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+  }
+
+.task-lower-right {
+    align-items: flex-end; /* Wyrównanie zawartości do prawej strony */
+    text-align: right; /* Wyrównanie tekstu do prawej */
+}
+
+.edit-button-container {
+    display: flex;
+    justify-content: center;
+}

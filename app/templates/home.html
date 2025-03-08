@@ -1,0 +1,242 @@
+{% extends "base.html" %} 
+{% block title %}Tasks{% endblock %} 
+{% block content %}
+
+
+<!-- DODAWANIE NOWYCH TASKÓW -->
+
+
+<!-- Formularz dla wpisania tytułu -->
+<form method="POST">
+  <div class="form-group">
+  <label for="title">Title</label>
+  <input type="text" name="title" id="title" class="form-control" placeholder="Enter title"/>
+</div>
+
+<!-- Formularz dla wpisania treści notatki -->
+<div class="form-group">
+  <label for="note">Note</label>
+  <textarea name="note" id="note" placeholder="Enter note" class="form-control"></textarea>
+</div>
+
+<!-- Formularz dodawania deadlinu -->
+<div class="form-group">
+  <label for="deadline">Deadline</label>
+  <input type="date" name="deadline" id="deadline" class="form-control">
+</div>
+
+<!-- Formularz dla wyboru tagu i statusu z listy -->
+<div class="form-group">
+  <div class="tags-status-container">
+    <div class="tags-container">
+      <label for="tags">Tags:</label>
+      <select class="tags" id="tags" name="tags" multiple>
+        {% if tags|length == 0 %}
+          <option disabled>No tags in database yet. Please add tag.</option>
+        {% else %}
+          {% for tag in tags %}
+          <option style="color: {{ tag.color }};">{{ tag.name }} </option>
+          {% endfor %}
+        {% endif %}
+      </select>
+    </div>
+  <div class="status-container">
+    <label for="status">Statuses:</label>
+    <select class="status" id="status" name="status" size="6">
+      {% if statuses|length == 0 %}
+      <option disabled>No status options defined yet. Please add status options in "status" page.</option>
+      {% else %}
+        {% for status in statuses %}
+          <option style="color: {{ status.color }};"> {{ status.name }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </div>
+</div>
+
+<!-- Przycisk "add note" -->
+<div style="text-align: center; margin-top: 15px;">
+  <br/>
+  <button type="submit" class="btn btn-primary">Add New Task</button>
+</div>
+</form>
+
+<br />
+
+<h1 style="text-align: center;">Your Tasks:</h1>
+
+<!-- WYŚWIETLANIE LISTY NOTATEK -->
+
+<ul class="list-group list-group-flush" id="notes">
+  {% for note in user.notes %}
+      <li class="list-group-item">
+        <div class="task-upper">
+        <div class="task-title-display">
+          <strong class="title-display">{{ note.title }}</strong><br />
+        </div>
+        <div class="task-data-display">
+          <p id="note-dispaly">{{ note.data }}</p>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 2px solid #2f2b8d;">
+
+        <!-- WYŚWIETLANIE TAGÓW I STATUSÓW -->
+        <div class="task-lower">
+
+          <div class="task-lower-left">
+
+            <!-- Wyświetlanie tagów przypisanych do notatki -->
+            <div class="task-tags-display">
+              <strong>Tags:</strong>
+              <div class="tags-container-display">
+                {% if note.tags %}
+                  {% for tag in note.tags %}
+                    <span class="tag" style="color: {{ tag.color }};">{{ tag.name }}</span>
+                  {% endfor %}
+                {% else %}
+                  <span>No tags assigned</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Wyświetlanie daty utworzenia taska -->
+            <div class="aded-data-display">
+              <strong class="date">Created: {{ note.date }}</strong>
+            </div>
+          </div>
+
+          <div class="task-lower-right">
+
+            <!-- Wyświetlanie statusu w notatce -->
+            <div class="status-container-display">
+              <strong>Status:</strong>
+                <span class="status-span" style="color: {{ note.status.color }};">
+                  {{note.status.name if note.status else 'No status assigned'}}</span>
+            </div>
+      
+            <!-- Wyświetlanie deadlinu i pozostałego czasu -->
+            <div class="deadline-display">
+              <strong class="deadline">Deadline: {{ note.deadline }}</strong>
+            </div>
+            <div>
+              <strong class="remain-time">Remain time: {{ note.remain_time }}</strong>
+            </div>
+          </div>    
+
+        </div>
+
+      <!-- Przycisk do usuwania notatek -->
+      <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+
+      <!-- Przycisk EDYCJI -->
+      <div class="edit-button-container">
+
+        <!-- Trigger the modal with a button -->
+        <button 
+          type="button" class="btn btn-info btn-md" onClick="fillModal({{ note.id }})" data-toggle="modal" data-target="#edit-button-{{note.id}}" data-backdrop="static" 
+          data-note-id="{{note.id}}"
+          data-title="{{ note.title }}" 
+          data-body="{{note.data}}"
+          data-deadline="{{note.deadline}}"
+          data-status="{{note.status.name}}"
+          data-tag="{% for tag in note.tags %}{{tag.name}},{% endfor %}">
+          Task Properties
+        </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="edit-button-{{note.id}}" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+            <h4 class="modal-title" id="modal-title">Edit Task Properties</h4>
+          </div>
+          
+          <div class="modal-body">
+            <!--FORMULARZ-->
+            <form method="POST" action="/edit-note">
+              <input type="hidden" name="note_id" id="edit-note-id-{{note.id}}">
+              
+              <!-- Edycja tytułu-->
+              <div class="form-group">
+                <label for="edit-title-{{note.id}}">Edit Title:</label>
+                <input type="text" name="edit-title" id="edit-title-{{note.id}}" class="form-control">
+              </div>
+
+              <!-- Edycja edycja notatki-->
+              <div class="form-group">
+                <label for="edit-note-{{note.id}}">Edit Note:</label>
+                <textarea name="note" id="edit-note-{{note.id}}" class="form-control" rows="5" cols="10"></textarea>
+              </div>
+
+              <!-- Edycja edycja deadlinu-->
+              <div class="form-group">
+                <label for="edit-deadline-{{note.id}}">Edit Deadline:</label>
+                <input type="date" name="date" id="edit-date-{{note.id}}" class="form-control">
+              </div>
+
+              <br>
+
+              <!-- Edycja edycja statusu-->
+              <div class="edit-status">
+                <label for="edit-status-{{note.id}}">Change <span style="color: {{note.status.color}};">{{note.status.name}}</span> status for:</label>
+                <select class="status" id="edit-status-{{note.id}}" name="status">
+                  {% for status in statuses %}
+                    {% if status.name != note.status.name %}
+                      <option style="color: {{status.color}};">{{ status.name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+
+              <br>
+
+              <!--EDYTOWANIE TAGÓW-->
+              <div class="edit-tags">
+                <!-- Dodawanie tagów-->
+                <div class="form-group">
+                  <label for="add-tags-{{note.id}}">Add Tags:</label>
+                  <select class="add-tags" id="add-tags-{{note.id}}" name="add-tags" multiple="True">
+                    {% for tag in tags if tag.name not in note.tags|map(attribute='name') %}
+                        <option style="color: {{ tag.color }};">{{ tag.name }}</option>                    
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <br>
+
+                <!-- Usuwanie tagów -->
+                <div class="form-group">
+                  <label for="remove-tags-{{note.id}}">Remove Tags:</label>
+                  <select class="remove-tags" id="remove-tags-{{note.id}}" name="remove-tags" multiple="True">
+                    {% for tag in tags if tag.name in note.tags|map(attribute='name') %}
+                        <option style="color: {{ tag.color }};">{{ tag.name }}</option>                    
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              
+
+              <div class="save-button-container">
+                <button type="submit" class="btn btn-primary" id="save-button">Save Changes</button>
+              </div>
+
+            </form>
+          </div>
+
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
